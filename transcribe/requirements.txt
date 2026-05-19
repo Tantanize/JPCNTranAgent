@@ -1,0 +1,5 @@
+openai-whisper
+mcp[cli]
+starlette
+uvicorn
+httpx
