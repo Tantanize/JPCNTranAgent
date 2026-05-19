@@ -1,0 +1,9 @@
+pysubs2
+mcp[cli]
+starlette
+uvicorn
+httpx
+anthropic          # for model=claude
+google-generativeai  # for model=gemini
+openai             # for model=openai
+# ollama backend uses httpx (already listed above), no extra package needed
