@@ -1,4 +1,12 @@
 openai-whisper
+# funasr 1.3.1 (PyPI) has broken imports for FunASRNano; install from GitHub instead:
+#   pip install git+https://github.com/alibaba-damo-academy/FunASR.git
+# editdistance 0.8.x has no Windows wheel for Python 3.13; install from source first:
+#   pip install git+https://github.com/roy-ht/editdistance.git@v0.6.2
+funasr
+modelscope
+huggingface_hub
+transformers
 mcp[cli]
 starlette
 uvicorn
