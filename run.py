@@ -59,6 +59,8 @@ examples:
     parser.add_argument("--input",   required=True, help="Input file path")
     parser.add_argument("--output",  help="Output file path (optional)")
     parser.add_argument("--template", help="[transcribe] .ass template file")
+    parser.add_argument("--backend", default="whisper", choices=["whisper", "funasr"],
+                        help="[transcribe] ASR backend (default: whisper)")
     parser.add_argument("--model",    default="gemini",
                         choices=["claude", "gemini", "openai", "ollama"],
                         help="[ass_translate] LLM backend (default: gemini)")
@@ -78,6 +80,7 @@ examples:
         tool_args = {
             "input_path":    input_path,
             "template_path": str(Path(args.template).resolve()),
+            "backend":       args.backend,
         }
         if args.output:
             tool_args["output_path"] = str(Path(args.output).resolve())
@@ -112,11 +115,11 @@ examples:
 
     try:
         result = call_tool(args.server, args.server, tool_args)
-        print("\n✅ Done!")
+        print("\nDone!")
         for k, v in result.items():
             print(f"   {k}: {v}")
     except Exception as e:
-        print(f"\n✗ {e}", file=sys.stderr)
+        print(f"\nError: {e}", file=sys.stderr)
         sys.exit(1)
 
 

@@ -80,6 +80,16 @@ transcribe\.venv\Scripts\pip install torch torchvision torchaudio --index-url ht
 transcribe\.venv\Scripts\pip install -r transcribe\requirements.txt
 ```
 
+### 安装 FunASR（用于 `--backend funasr`）
+
+如果想用 Fun-ASR-Nano-2512 替代 Whisper 进行转录：
+
+```bat
+transcribe\.venv\Scripts\pip install funasr
+```
+
+模型文件首次运行时会自动从 HuggingFace 下载，约 1-2 GB，缓存在本地后不需要重复下载。
+
 ---
 
 ## 第四步：安装翻译后端（ass_translate 用）
@@ -87,7 +97,7 @@ transcribe\.venv\Scripts\pip install -r transcribe\requirements.txt
 选择你要用的翻译后端，至少装一个：
 
 ```bat
-:: Gemini（需要 Gemini API key）：
+:: Gemini（需要 Gemini API Key）：
 ass_translate\.venv\Scripts\pip install google-generativeai
 
 :: Claude（需要 Anthropic API key）：
@@ -165,19 +175,22 @@ start_servers.bat
 确认启动成功（新开一个终端）：
 
 ```bat
-curl http://localhost:8771/sse
-curl http://localhost:8773/sse
+curl http://localhost:8771/health
+curl http://localhost:8773/health
 ```
 
-有响应就说明正常。
+返回 `{"status":"ok","server":"..."}` 就说明正常。
 
 ---
 
 ## 第九步：运行
 
 ```bat
-:: 完整流程（音视频 → 双语字幕视频）：
+:: 完整流程，用 Whisper 转录 + Gemini 翻译：
 python subtitle_agent.py --input D:\videos\video.mp4 --template D:\tools\template.ass --model gemini
+
+:: 用 FunASR 转录：
+python subtitle_agent.py --input video.mp4 --template template.ass --backend funasr --model gemini
 
 :: 带词汇表：
 python subtitle_agent.py --input video.mp4 --template template.ass --glossary glossary.txt --model gemini
@@ -201,6 +214,7 @@ python subtitle_agent.py --input video.mp4 --template template.ass --model gemin
 | `--glossary` | 词汇表 txt | — |
 | `--output` | 输出视频路径 | `<输入文件名>_subbed.mp4` |
 | `--workdir` | 中间文件目录 | 与输入文件同目录 |
+| `--backend` | 转录后端：`whisper` / `funasr` | `whisper` |
 | `--model` | 翻译后端：`gemini` / `claude` / `openai` / `ollama` | `gemini` |
 | `--ollama-model` | Ollama 模型名（仅 `--model=ollama` 时有效） | `qwen2.5:14b` |
 | `--crf` | 视频质量 0–51，越小越好 | `18` |

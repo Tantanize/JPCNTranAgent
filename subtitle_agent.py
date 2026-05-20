@@ -83,6 +83,7 @@ def run_pipeline(args):
             "input_path":    str(input_path),
             "template_path": str(Path(args.template).resolve()),
             "output_path":   str(jp_ass),
+            "backend":       args.backend,
         })
         jp_ass = Path(result["output_path"])
         print(f"  ✓ transcribed {result['segments']} segments → {jp_ass}")
@@ -156,6 +157,9 @@ def main():
     parser.add_argument("--workdir",  help="Working directory for intermediate files")
     parser.add_argument("--crf",      type=int, default=18,   help="H.264 CRF (default: 18)")
     parser.add_argument("--preset",   default="slow",         help="ffmpeg preset (default: slow)")
+    parser.add_argument("--backend",  default="whisper",
+                        choices=["whisper", "funasr"],
+                        help="ASR backend for transcription (default: whisper)")
     parser.add_argument("--model",    default="gemini",
                         choices=["claude", "gemini", "openai", "ollama"],
                         help="LLM backend for translation (default: gemini)")
